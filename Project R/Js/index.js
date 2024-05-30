@@ -3,10 +3,6 @@ function validation(){
         document.getElementById("result").innerHTML="Enter Username*";
         return false;
     }
-    else if(document.Formfill.Username.value.length<6){
-        document.getElementById("result").innerHTML="Atleast six letter*";
-        return false;
-    }
     else if(document.Formfill.Email.value==""){
         document.getElementById("result").innerHTML="Enter your Email";
         return false;

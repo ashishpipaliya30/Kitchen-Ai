@@ -106,7 +106,8 @@ input::placeholder{
 
 .popup{
     width: 400px;
-    background-color: #fff;
+    /* background-color: #fff; */
+    backdrop-filter: blur(15px);
     border-radius: 6px;
     position: absolute;
     top: 0;
@@ -121,6 +122,8 @@ input::placeholder{
 }
 
 .popup j{
+    margin-top: 30px;
+    margin-bottom: -90px;
     color: #00ff00;
     font-size: 50px;
 }
@@ -142,7 +145,7 @@ input::placeholder{
 .popup a{
     color: #fff;
     text-decoration: none;
-    font-weight: 600;
+    font-weight: 200;
     letter-spacing: 2px;
 }
 
@@ -156,4 +159,5 @@ input::placeholder{
     font-weight: 900;
     font-size: 38px;
     margin: 30px 0 10px;
+    margin-top: 15px;
 }
