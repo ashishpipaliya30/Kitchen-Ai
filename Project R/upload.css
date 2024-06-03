@@ -1,7 +1,7 @@
 body {
     font-family: 'Arial', sans-serif;
     /* background-color: #73abe3; */
-    background: url('img/bg1.avif') no-repeat;
+    background: url('bg1.avif') no-repeat;
     background-size: cover;
     background-position: center;
     min-height: 100vh;
@@ -45,7 +45,7 @@ input[type="file"] {
     padding: 0 20px 0 5px;
     color: #000000;
     font-size: 16px
-    margin-bottom: 20px;
+    /* margin-bottom: 20px; */
 }
 
 .image-preview {
