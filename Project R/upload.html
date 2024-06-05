@@ -5,14 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Upload</title>
     <link rel="stylesheet" href="CSS/upload.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
 </head>
 <body>
     <div class="upload-container">
-        <h1>Welcome to Kitchen-Ai</h1>
-        <h2>Upload an Image</h2>
+        <h1>Welcome to Kitchen-AI</h1>
+        <h2>Upload Your Fridge Image</h2>
         <input type="file" id="imageUpload" accept="image/*">
         <div id="imagePreview" class="image-preview"></div>
+        <div id="message"></div>
         <button id="getRecipeButton" class="hidden">Get Your Recipe</button>
+        <div id="ingredientList"></div>
     </div>
     <script src="Js/upload.js"></script>
 </body>
