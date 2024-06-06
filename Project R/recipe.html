@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe</title>
+    <link rel="stylesheet" href="CSS/upload.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
+</head>
+<body>
+    <h1>Recipe</h1>
+    <div id="fridgeItems"></div>
+
+    <!-- <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Parse the query parameter to get the items in the fridge
+            const urlParams = new URLSearchParams(window.location.search);
+            const itemsInFridge = urlParams.get('items');
+
+            // Display the items in the fridge on the page
+            const fridgeItemsDiv = document.getElementById('fridgeItems');
+            if (itemsInFridge) {
+                const itemsArray = decodeURIComponent(itemsInFridge).split(',');
+                const itemList = document.createElement('ul');
+                itemsArray.forEach(item => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = item.trim();
+                    itemList.appendChild(listItem);
+                });
+                fridgeItemsDiv.appendChild(itemList);
+            } else {
+                fridgeItemsDiv.textContent = 'No items in the fridge.';
+            }
+        });
+    </script> -->   
+    <script src="Js/upload.js"></script>
+</body>
+</html>

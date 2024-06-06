@@ -18,53 +18,66 @@ document.addEventListener('DOMContentLoaded', function() {
                 message.innerText = 'Analyzing image...';
                 getRecipeButton.classList.add('hidden');
                 ingredientList.innerHTML = '';
-                analyzeImage(img);
+                analyzeFridgeContents(img);
             };
             reader.readAsDataURL(file);
         }
     });
 
-    // Function to analyze image using TensorFlow.js and COCO-SSD model
-    async function analyzeImage(imgElement) {
-        const model = await cocoSsd.load();
-        const predictions = await model.detect(imgElement);
+    // Function to analyze fridge contents using TensorFlow.js and COCO-SSD model
+    async function analyzeFridgeContents(imgElement) {
+        try {
+            const model = await cocoSsd.load();
+            const predictions = await model.detect(imgElement);
+            console.log(predictions); // Check predictions in the console
 
-        // Check if an open fridge is detected based on certain criteria
-        const fridgeDetected = checkForFridge(predictions);
+            // Check if an open fridge is detected based on certain criteria
+            const fridgeDetected = checkForFridge(predictions);
 
-        if (fridgeDetected) {
-            message.innerText = 'Great!';
-            const ingredients = extractIngredients(predictions);
-            displayIngredients(ingredients);
-        } else {
-            message.innerText = 'Please upload your "Open Fridge Image".';
+            if (fridgeDetected) {
+                message.innerText = 'Great! Open fridge detected.';
+                const itemsInFridge = extractItemsInFridge(predictions);
+                displayItemsInFridge(itemsInFridge);
+                getRecipeButton.classList.remove('hidden');
+                getRecipeButton.addEventListener('click', fetchRecipe);
+            } else {
+                message.innerText = 'Please upload an "Open Fridge Image".';
+            }
+        } catch (error) {
+            console.error('Error analyzing fridge contents:', error);
         }
     }
 
     // Function to check for fridge based on detection results
     function checkForFridge(predictions) {
         // Example criteria for detecting a fridge (this logic can be adjusted)
-        const fridgeClasses = ['refrigerator', 'oven', 'microwave']; // Modify as per available classes
+        const fridgeClasses = ['refrigerator', 'fridge'];
         return predictions.some(prediction => fridgeClasses.includes(prediction.class) && prediction.score > 0.5);
     }
 
-    // Function to extract ingredients based on detection results
-    function extractIngredients(predictions) {
-        // Example criteria for extracting ingredients
-        const ingredientClasses = ['bottle', 'can', 'apple', 'banana', 'orange', 'carrot', 'milk', 'egg']; // Modify as per available classes
-        return predictions
-            .filter(prediction => ingredientClasses.includes(prediction.class) && prediction.score > 0.5)
-            .map(prediction => prediction.class);
+    // Function to extract items inside the fridge based on detection results
+    function extractItemsInFridge(predictions) {
+        // Filter out items detected inside the fridge excluding generic labels like "refrigerator"
+        const fridgeItems = predictions.filter(prediction => prediction.score > 0.5 && prediction.class !== 'refrigerator' && prediction.class !== 'fridge');
+        console.log(fridgeItems); // Check extracted items in the console
+        return fridgeItems.map(prediction => prediction.class);
     }
 
-    // Function to display detected ingredients
-    function displayIngredients(ingredients) {
+    // Function to display detected items inside the fridge
+    function displayItemsInFridge(itemsInFridge) {
+        const uniqueItems = [...new Set(itemsInFridge)]; // Remove duplicate items
         ingredientList.innerHTML = '';
-        ingredients.forEach(ingredient => {
+        uniqueItems.forEach(item => {
             const listItem = document.createElement('li');
-            listItem.textContent = ingredient;
+            listItem.textContent = item;
             ingredientList.appendChild(listItem);
         });
-        getRecipeButton.classList.remove('hidden');
+    }
+
+    // Function to fetch recipe
+    function fetchRecipe() {
+        const itemsInFridge = Array.from(ingredientList.children).map(item => item.textContent).join(', '); // Get the list of items in the fridge
+        // Redirect to the recipe page with the list of items as a query parameter
+        window.location.href = `recipe.html?items=${encodeURIComponent(itemsInFridge)}`;
     }
 });
