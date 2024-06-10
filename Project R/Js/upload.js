@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
             getRecipeButton.classList.remove('hidden');
             getRecipeButton.addEventListener('click', fetchRecipe);
         } else {
-            message.innerText = 'Please upload an "Open Fridge Image".';
+            message.innerText = 'Please upload an "Open Fridge Image"';
         }
     }
 
