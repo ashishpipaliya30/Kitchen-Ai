@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const message = document.getElementById('message');
     const getRecipeButton = document.getElementById('getRecipeButton');
     const ingredientList = document.getElementById('ingredientList');
+    let itemsInFridge = [];
 
     // Function to display image preview
     imageUpload.addEventListener('change', function(event) {
@@ -24,27 +25,24 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Function to analyze fridge contents using TensorFlow.js and COCO-SSD model
+    // Function to analyze fridge contents using TensorFlow.js and EfficientDet model
     async function analyzeFridgeContents(imgElement) {
-        try {
-            const model = await cocoSsd.load();
-            const predictions = await model.detect(imgElement);
-            console.log(predictions); // Check predictions in the console
+        const cocoModel = await cocoSsd.load();
 
-            // Check if an open fridge is detected based on certain criteria
-            const fridgeDetected = checkForFridge(predictions);
+        // Perform object detection using COCO-SSD
+        const cocoPredictions = await cocoModel.detect(imgElement);
 
-            if (fridgeDetected) {
-                message.innerText = 'Great! Open fridge detected.';
-                const itemsInFridge = extractItemsInFridge(predictions);
-                displayItemsInFridge(itemsInFridge);
-                getRecipeButton.classList.remove('hidden');
-                getRecipeButton.addEventListener('click', fetchRecipe);
-            } else {
-                message.innerText = 'Please upload an "Open Fridge Image".';
-            }
-        } catch (error) {
-            console.error('Error analyzing fridge contents:', error);
+        // Check if an open fridge is detected based on certain criteria
+        const fridgeDetected = checkForFridge(cocoPredictions);
+
+        if (fridgeDetected) {
+            message.innerText = 'Great!';
+            itemsInFridge = extractItemsInFridge(cocoPredictions);
+            displayItemsInFridge(itemsInFridge);
+            getRecipeButton.classList.remove('hidden');
+            getRecipeButton.addEventListener('click', fetchRecipe);
+        } else {
+            message.innerText = 'Please upload an "Open Fridge Image".';
         }
     }
 
@@ -59,7 +57,6 @@ document.addEventListener('DOMContentLoaded', function() {
     function extractItemsInFridge(predictions) {
         // Filter out items detected inside the fridge excluding generic labels like "refrigerator"
         const fridgeItems = predictions.filter(prediction => prediction.score > 0.5 && prediction.class !== 'refrigerator' && prediction.class !== 'fridge');
-        console.log(fridgeItems); // Check extracted items in the console
         return fridgeItems.map(prediction => prediction.class);
     }
 
@@ -76,8 +73,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Function to fetch recipe
     function fetchRecipe() {
-        const itemsInFridge = Array.from(ingredientList.children).map(item => item.textContent).join(', '); // Get the list of items in the fridge
+        const items = itemsInFridge.join(',');
         // Redirect to the recipe page with the list of items as a query parameter
-        window.location.href = `recipe.html?items=${encodeURIComponent(itemsInFridge)}`;
+        window.location.href = `recipe.html?items=${encodeURIComponent(items)}`;
     }
 });
