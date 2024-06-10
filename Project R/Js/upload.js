@@ -77,4 +77,12 @@ document.addEventListener('DOMContentLoaded', function() {
         // Redirect to the recipe page with the list of items as a query parameter
         window.location.href = `recipe.html?items=${encodeURIComponent(items)}`;
     }
+
+    // Load EfficientDet model
+    async function loadEfficientDetModel() {
+        const model = await tf.loadGraphModel('C:\Users\Ashish Pipaliya\Desktop\efficientdet-pytorch\effdet\object_detection');
+        return model;
+    }
+
+    loadEfficientDetModel(); // Call the function to load the model
 });
